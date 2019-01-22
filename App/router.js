@@ -27,7 +27,8 @@ export const SignedIn = TabNavigator(
     Main: {
       screen: Main,
       navigationOptions: {
-        tabBarLabel: 'Main',
+        title: 'Products',
+        tabBarLabel: 'Products',
         tabBarIcon: ({ tintColor }) =>
           <FontAwesome name="home" size={30} color={tintColor} />
       }
@@ -35,7 +36,6 @@ export const SignedIn = TabNavigator(
     Product: {
       screen: Product,
       navigationOptions: {
-        tabBarLabel: 'Main',
         tabBarIcon: ({ tintColor }) =>
           <FontAwesome name="home" size={30} color={tintColor} />
       }

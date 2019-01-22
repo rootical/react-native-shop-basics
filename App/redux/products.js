@@ -1,19 +1,34 @@
 import axios from "../configs/axios";
 
-import IP from "../../IP";
+import IP from "../configs/ip";
 
 /* -----------------    ACTION TYPES    ------------------ */
 
-const FETCH_PRODUCT = "SET_PRODUCT";
-const FETCH_PRODUCTS_BEGIN   = 'FETCH_PRODUCTS_BEGIN';
-const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
-const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
+const FETCH_PRODUCT_BEGIN = "FETCH_PRODUCT_BEGIN";
+const FETCH_PRODUCT_SUCCESS = "FETCH_PRODUCT_SUCCESS";
+const FETCH_PRODUCT_FAILURE = "FETCH_PRODUCT_FAILURE";
+const FETCH_PRODUCTS_BEGIN = "FETCH_PRODUCTS_BEGIN";
+const FETCH_PRODUCTS_SUCCESS = "FETCH_PRODUCTS_SUCCESS";
+const FETCH_PRODUCTS_FAILURE = "FETCH_PRODUCTS_FAILURE";
 
 /* ------------     ACTION CREATORS      ------------------ */
 
+// ONE PRODUCT
+const fetchProductBegin = () => ({
+  type: FETCH_PRODUCT_BEGIN
+});
 
-const fetchProduct = product => ({ type: FETCH_PRODUCT }, product);
+const fetchProductSuccess = product => ({
+  type: FETCH_PRODUCT_SUCCESS,
+  payload: product
+});
 
+const fetchProductFailure = error => ({
+  type: FETCH_PRODUCT_FAILURE,
+  payload: { error }
+});
+
+// PRODUCT LIST:
 const fetchProductsBegin = () => ({
   type: FETCH_PRODUCTS_BEGIN
 });
@@ -27,15 +42,39 @@ const fetchProductsFailure = error => ({
   type: FETCH_PRODUCTS_FAILURE,
   payload: { error }
 });
+
 /* ------------          REDUCER         ------------------ */
 const initialState = {
-  products: [],
+  items: [],
+  product: {},
   loading: false,
   error: null
 };
 
 export default function productReducer(state = initialState, action) {
   switch (action.type) {
+    case FETCH_PRODUCT_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+
+    case FETCH_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        product: action.payload
+      };
+
+    case FETCH_PRODUCT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        product: {}
+      };
+
     case FETCH_PRODUCTS_BEGIN:
       return {
         ...state,
@@ -47,7 +86,7 @@ export default function productReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        items: action.payload.products
+        items: [...action.payload.products]
       };
 
     case FETCH_PRODUCTS_FAILURE:
@@ -65,29 +104,32 @@ export default function productReducer(state = initialState, action) {
 
 /* ------------       THUNK CREATORS     ------------------ */
 
-const query =
-  "products?searchCriteria[sortOrders][0][field]=price&searchCriteria[sortOrders][1][field]=name";
-
+const QUERY = "products?searchCriteria[pageSize]="
 export function fetchProducts() {
-    return dispatch => {
-      dispatch(fetchProductsBegin());
-      return axios.get(IP + query)
-        .then(res => {
-          dispatch(fetchProductsSuccess(res.data.items));
-          return res.data.items;
-        })
-        .catch(error => dispatch(fetchProductsFailure(error)));
-    };
+  return dispatch => {
+    dispatch(fetchProductsBegin());
+    return axios
+    // todo: add more items by demand
+      .get(IP + QUERY + 10)
+      .then(res => {
+        dispatch(fetchProductsSuccess(res.data.items));
+        return res.data.items;
+      })
+      .catch(error => dispatch(fetchProductsFailure(error)));
+  };
 }
 
-export const openProduct = (id, navigation) => dispatch => {
-  // dispatch(GET_PRODUCT_LIST(userToken));
-  navigation.navigate("Product", { id: id });
+const PRODUCT_QUERY = "products?searchCriteria[pageSize]=";
+export const fetchProduct = (id, navigation) => dispatch => {
+  return dispatch => {
+    dispatch(fetchProductBegin());
+    return axios
+      .get(IP + PRODUCT_QUERY + id)
+      .then(res => {
+        dispatch(fetchProductSuccess(res.data.items));
+        navigation.navigate("Product", { id: id });
+        return res.data.items;
+      })
+      .catch(error => dispatch(fetchProductFailure(error)));
+  };
 };
-
-/* ------------      HELPER FUNCTIONS     ------------------ */
-
-function setUserAndRedirect(userToken, navigation, dispatch) {
-  dispatch(setCurrentUser(userToken));
-  navigation.navigate("SignedIn");
-}

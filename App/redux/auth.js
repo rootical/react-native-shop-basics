@@ -1,7 +1,6 @@
 import axios from '../configs/axios';
 
-import IP from '../../IP';
-import { getProducts, setProductsList } from './products';
+import IP from '../configs/ip';
 /* -----------------    ACTION TYPES    ------------------ */
 
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -9,11 +8,11 @@ const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER';
 
 /* ------------     ACTION CREATORS      ------------------ */
 
-const setCurrentUser = (user) => {
+const setCurrentUser = (userToken) => {
   return {
     type: SET_CURRENT_USER,
     payload: {
-      user: user
+      userToken: userToken
     }
   }
 };
@@ -55,6 +54,7 @@ export const signup = (credentials, navigation) => dispatch => {
     .catch(() => navigation.navigate('SignedOut', {error: 'Signup failed.'}));
 };
 
+// todo proper logout
 export const logout = navigation => dispatch => {
   axios.delete(`${IP}/auth/logout`)
     .then(() => {

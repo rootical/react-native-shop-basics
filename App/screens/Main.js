@@ -6,7 +6,7 @@ import styles from '../theme/ApplicationStyles';
 import { List, ListItem } from "react-native-elements";
 
 import { logout } from '../redux/auth';
-import { openProduct, fetchProducts } from '../redux/products';
+import { fetchProduct, fetchProducts } from '../redux/products';
 
 class Main extends React.Component {
 
@@ -16,7 +16,7 @@ class Main extends React.Component {
   }
 
   render() {
-    const { error, loading, products } = this.props;
+    const { error, loading, items } = this.props;
     return (
       <View style={styles.container}>
 
@@ -28,12 +28,13 @@ class Main extends React.Component {
           loading ? <Text>Loading!</Text> :
           <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
             <FlatList
-              data={products}
+              data={items}
               renderItem={({ item }) => (
-                <ListItem onPress={() => this.props.openProduct(item.id, this.props.navigation)}
+                <ListItem
+                  onPress={() => this.props.dispatch(fetchProduct(item.id, this.props.navigation))}
                   title={item.name}
                   subtitle={item.id}
-                  key={item.key}
+                  key={item.id}
                   containerStyle={{ borderBottomWidth: 1 }}
                 />
               )}
@@ -53,16 +54,16 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.products.items,
+  items: state.products.items,
   loading: state.products.loading,
   error: state.products.error
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  logout: (navigation) => dispatch(logout(navigation)),
-  openProduct: (id, navigation) => dispatch(openProduct(id, navigation)),
+// const mapDispatchToProps = (dispatch) => ({
+//   logout: (navigation) => dispatch(logout(navigation)),
+//   fetchProduct: (id, navigation) => dispatch(fetchProduct(id, navigation)),
   // TODO: why??
-  dispatch: dispatch
-});
+  // dispatch: dispatch
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps)(Main);
