@@ -10,11 +10,11 @@ const defaults = {
 export default StyleSheet.create({
   ...Fonts.style,
   container: {
-    flexDirection: 'column',
-    justifyContent: 'center',
     backgroundColor: Colors.background,
     paddingHorizontal: 5,
-    flex: 1
+    paddingVertical: 20,
+    flex: 1,
+    alignItems: 'stretch'
   },
   textLabel: {
     fontSize: 20,
@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
   textInput: {
     height: 40,
-    width: 300,
+    // flex: 1,
     margin: 10,
     color: Colors.text,
     fontSize: 15,

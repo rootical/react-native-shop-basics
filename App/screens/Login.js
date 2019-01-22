@@ -3,14 +3,16 @@ import { Text, TextInput, KeyboardAvoidingView, ScrollView, Button } from 'react
 import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
 
+// this is to not remember password, skip it :)
+import {email, password} from '../configs/sensitive';
 import { login } from '../redux/auth';
 
 class Login extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      email: 'vadzim_yakushau@epam.com',
-      password: 'q_$RJ"7Z',
+      email: email,
+      password: password,
       error: '' || (this.props.navigation.state.params && this.props.navigation.state.params.error)
     };
   }

@@ -1,7 +1,7 @@
 import axios from '../configs/axios';
 
 import IP from '../../IP';
-
+import { getProducts, setProductsList } from './products';
 /* -----------------    ACTION TYPES    ------------------ */
 
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -9,7 +9,15 @@ const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER';
 
 /* ------------     ACTION CREATORS      ------------------ */
 
-const setCurrentUser = user => ({ type: SET_CURRENT_USER, user });
+const setCurrentUser = (user) => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: {
+      user: user
+    }
+  }
+};
+
 export const removeCurrentUser = () => ({ type: REMOVE_CURRENT_USER });
 
 /* ------------          REDUCER         ------------------ */
@@ -18,7 +26,7 @@ export default function reducer (currentUser = {}, action) {
   switch (action.type) {
 
     case SET_CURRENT_USER:
-      return action.user;
+      return {...action.payload};
 
     case REMOVE_CURRENT_USER:
       return {};
@@ -31,11 +39,13 @@ export default function reducer (currentUser = {}, action) {
 /* ------------       THUNK CREATORS     ------------------ */
 
 export const login = (credentials, navigation) => dispatch => {
-  axios.post(`${IP}customer/token`, {
+  axios.post(`${IP}integration/customer/token`, {
     username: credentials.email,
     password: credentials.password
   })
-    .then(res => setUserAndRedirect(res.data, navigation, dispatch))
+    .then((res) => {
+      setUserAndRedirect(res.data, navigation, dispatch);
+    })
     .catch(error => navigation.navigate('SignedOut', {error: `Login failed. ${error}`}));
 };
 
@@ -49,9 +59,9 @@ export const logout = navigation => dispatch => {
   axios.delete(`${IP}/auth/logout`)
     .then(() => {
       dispatch(removeCurrentUser());
-      navigation.navigate('SignedOut', {error: 'Logout successful.'});
+      navigation.navigate('SignedOut');
     })
-    .catch((error) => console.error('Logout successful:  ', error));
+    .catch((error) => console.error('Logout unsuccessful:  ', error));
 };
 
 /* ------------      HELPER FUNCTIONS     ------------------ */
