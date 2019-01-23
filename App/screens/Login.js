@@ -74,18 +74,6 @@ class Login extends React.Component {
           title="Login"
           onPress={this.handleSubmit}
         />
-        <Button
-          buttonStyle={styles.button}
-          title="Sign Up"
-          onPress={() => {
-            this.props.navigation.navigate('Signup');
-            this.setState({
-              email: '',
-              password: '',
-              error: ''
-            });
-          }}
-        />
       </ScrollView>
     </KeyboardAvoidingView>
   );

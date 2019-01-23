@@ -5,8 +5,7 @@ import styles from '../theme/ApplicationStyles';
 
 import { List, ListItem } from "react-native-elements";
 
-import { logout } from '../redux/auth';
-import { fetchProduct, fetchProducts } from '../redux/products';
+import { fetchProducts } from '../redux/products';
 
 class Main extends React.Component {
 
@@ -28,10 +27,11 @@ class Main extends React.Component {
           loading ? <Text>Loading!</Text> :
           <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
             <FlatList
+              keyExtractor={(item, index) => index.toString()}
               data={items}
               renderItem={({ item }) => (
                 <ListItem
-                  onPress={() => this.props.dispatch(fetchProduct(item.id, this.props.navigation))}
+                  onPress={() => this.props.navigation.navigate("Product", { sku: item.sku })}
                   title={item.name}
                   subtitle={item.id}
                   key={item.id}
@@ -58,12 +58,5 @@ const mapStateToProps = state => ({
   loading: state.products.loading,
   error: state.products.error
 });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   logout: (navigation) => dispatch(logout(navigation)),
-//   fetchProduct: (id, navigation) => dispatch(fetchProduct(id, navigation)),
-  // TODO: why??
-  // dispatch: dispatch
-// });
 
 export default connect(mapStateToProps)(Main);

@@ -3,7 +3,6 @@ import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
 import { FontAwesome } from 'react-native-vector-icons';
 
 import Login from './screens/Login';
-import Signup from './screens/Signup';
 import Main from './screens/Main';
 import Product from './screens/Product';
 
@@ -12,12 +11,6 @@ export const SignedOut = StackNavigator({
     screen: Login,
     navigationOptions: {
       title: 'Login'
-    }
-  },
-  Signup: {
-    screen: Signup,
-    navigationOptions: {
-      title: 'Sign Up'
     }
   }
 });

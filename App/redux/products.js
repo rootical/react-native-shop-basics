@@ -119,17 +119,15 @@ export function fetchProducts() {
   };
 }
 
-const PRODUCT_QUERY = "products?searchCriteria[pageSize]=";
-export const fetchProduct = (id, navigation) => dispatch => {
-  return dispatch => {
+const PRODUCT_QUERY = "products/";
+export const fetchProduct = (sku) =>
+  dispatch => {
     dispatch(fetchProductBegin());
     return axios
-      .get(IP + PRODUCT_QUERY + id)
+      .get(IP + PRODUCT_QUERY + sku)
       .then(res => {
-        dispatch(fetchProductSuccess(res.data.items));
-        navigation.navigate("Product", { id: id });
+        dispatch(fetchProductSuccess(res.data));
         return res.data.items;
       })
       .catch(error => dispatch(fetchProductFailure(error)));
   };
-};

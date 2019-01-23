@@ -1,31 +1,40 @@
-import React from 'react';
-import { Text, View, Button } from 'react-native';
-import { connect } from 'react-redux';
-import styles from '../theme/ApplicationStyles';
+import React from "react";
+import { Text, View, Button } from "react-native";
+import { connect } from "react-redux";
+import styles from "../theme/ApplicationStyles";
 
-import { logout } from '../redux/auth';
+import { fetchProduct } from '../redux/products';
 
 class Product extends React.Component {
 
+  componentDidMount() {
+    //   TODO: better way to get an id?
+
+    this.props.dispatch(fetchProduct(this.props.navigation.state.params.sku));
+  }
   render() {
+    const { error, loading, product } = this.props;
     return (
 
       <View style={styles.container}>
-        <Text style={styles.h1}>Product 1</Text>
-      </View>
 
+        {error ? <Text>Error! {error.message}</Text> : null}
+        {
+        loading ? <Text>Loading!</Text> :
+        <Text style={styles.h1}>{product.name}</Text>
+        }
+      </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
-    product: state.products.product,
-    loading: state.products.loading,
-    error: state.products.error
+  product: state.products.product,
+  loading: state.products.loading,
+  error: state.products.error
 });
 
-// const mapDispatchToProps = (dispatch) => ({
-//   logout: (navigation) => dispatch(logout(navigation))
-// });
-
-export default connect(mapStateToProps, null)(Product);
+export default connect(
+  mapStateToProps,
+  null
+)(Product);

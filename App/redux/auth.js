@@ -48,12 +48,6 @@ export const login = (credentials, navigation) => dispatch => {
     .catch(error => navigation.navigate('SignedOut', {error: `Login failed. ${error}`}));
 };
 
-export const signup = (credentials, navigation) => dispatch => {
-  axios.post(`${IP}/auth/signup`, credentials)
-    .then(res => setUserAndRedirect(res.data, navigation, dispatch))
-    .catch(() => navigation.navigate('SignedOut', {error: 'Signup failed.'}));
-};
-
 // todo proper logout
 export const logout = navigation => dispatch => {
   axios.delete(`${IP}/auth/logout`)
