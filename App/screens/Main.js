@@ -31,7 +31,7 @@ class Main extends React.Component {
               data={items}
               renderItem={({ item }) => (
                 <ListItem
-                  onPress={() => this.props.navigation.navigate("Product", { sku: item.sku })}
+                  onPress={() => this.navigateToProduct(item.sku)}
                   title={item.name}
                   subtitle={item.id}
                   key={item.id}
@@ -49,6 +49,10 @@ class Main extends React.Component {
         />
       </View>
     );
+  }
+
+  navigateToProduct(sku) {
+    this.props.navigation.navigate("Product", { sku: sku });
   }
 
 }

@@ -4,31 +4,12 @@ import IP from "../configs/ip";
 
 /* -----------------    ACTION TYPES    ------------------ */
 
-const FETCH_PRODUCT_BEGIN = "FETCH_PRODUCT_BEGIN";
-const FETCH_PRODUCT_SUCCESS = "FETCH_PRODUCT_SUCCESS";
-const FETCH_PRODUCT_FAILURE = "FETCH_PRODUCT_FAILURE";
 const FETCH_PRODUCTS_BEGIN = "FETCH_PRODUCTS_BEGIN";
 const FETCH_PRODUCTS_SUCCESS = "FETCH_PRODUCTS_SUCCESS";
 const FETCH_PRODUCTS_FAILURE = "FETCH_PRODUCTS_FAILURE";
 
 /* ------------     ACTION CREATORS      ------------------ */
 
-// ONE PRODUCT
-const fetchProductBegin = () => ({
-  type: FETCH_PRODUCT_BEGIN
-});
-
-const fetchProductSuccess = product => ({
-  type: FETCH_PRODUCT_SUCCESS,
-  payload: product
-});
-
-const fetchProductFailure = error => ({
-  type: FETCH_PRODUCT_FAILURE,
-  payload: { error }
-});
-
-// PRODUCT LIST:
 const fetchProductsBegin = () => ({
   type: FETCH_PRODUCTS_BEGIN
 });
@@ -46,34 +27,12 @@ const fetchProductsFailure = error => ({
 /* ------------          REDUCER         ------------------ */
 const initialState = {
   items: [],
-  product: {},
   loading: false,
   error: null
 };
 
 export default function productReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_PRODUCT_BEGIN:
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-
-    case FETCH_PRODUCT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        product: action.payload
-      };
-
-    case FETCH_PRODUCT_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error,
-        product: {}
-      };
 
     case FETCH_PRODUCTS_BEGIN:
       return {
@@ -118,16 +77,3 @@ export function fetchProducts() {
       .catch(error => dispatch(fetchProductsFailure(error)));
   };
 }
-
-const PRODUCT_QUERY = "products/";
-export const fetchProduct = (sku) =>
-  dispatch => {
-    dispatch(fetchProductBegin());
-    return axios
-      .get(IP + PRODUCT_QUERY + sku)
-      .then(res => {
-        dispatch(fetchProductSuccess(res.data));
-        return res.data.items;
-      })
-      .catch(error => dispatch(fetchProductFailure(error)));
-  };

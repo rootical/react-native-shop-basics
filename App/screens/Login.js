@@ -11,8 +11,8 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: email,
-      password: password,
+      email: email || '',
+      password: password || '',
       error: '' || (this.props.navigation.state.params && this.props.navigation.state.params.error)
     };
   }

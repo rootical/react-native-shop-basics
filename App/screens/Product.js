@@ -3,13 +3,12 @@ import { Text, View, Button } from "react-native";
 import { connect } from "react-redux";
 import styles from "../theme/ApplicationStyles";
 
-import { fetchProduct } from '../redux/products';
+import { fetchProduct } from '../redux/product';
 
 class Product extends React.Component {
 
   componentDidMount() {
     //   TODO: better way to get an id?
-
     this.props.dispatch(fetchProduct(this.props.navigation.state.params.sku));
   }
   render() {
