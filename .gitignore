@@ -2,6 +2,7 @@
 
 # app specific
 App/configs/sensitive.js
+App/configs/ip.js
 
 # expo
 .expo/

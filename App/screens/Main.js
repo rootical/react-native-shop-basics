@@ -6,6 +6,7 @@ import styles from '../theme/ApplicationStyles';
 import { List, ListItem } from "react-native-elements";
 
 import { fetchProducts } from '../redux/products';
+import { fetchProduct } from '../redux/product';
 
 class Main extends React.Component {
 
@@ -52,7 +53,14 @@ class Main extends React.Component {
   }
 
   navigateToProduct(sku) {
-    this.props.navigation.navigate("Product", { sku: sku });
+    this.props.dispatch(fetchProduct(sku));
+    this.props.navigation.navigate({
+        routeName: 'Product',
+        params: {
+          sku: sku
+        },
+        key: sku
+    });
   }
 
 }

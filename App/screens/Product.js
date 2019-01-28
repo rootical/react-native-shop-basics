@@ -1,18 +1,19 @@
 import React from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import styles from "../theme/ApplicationStyles";
 
 import { fetchProduct } from '../redux/product';
 
 class Product extends React.Component {
-
-  componentDidMount() {
-    //   TODO: better way to get an id?
-    this.props.dispatch(fetchProduct(this.props.navigation.state.params.sku));
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true
+    }
   }
   render() {
-    const { error, loading, product } = this.props;
+    const { error, loading, item } = this.props;
     return (
 
       <View style={styles.container}>
@@ -20,15 +21,16 @@ class Product extends React.Component {
         {error ? <Text>Error! {error.message}</Text> : null}
         {
         loading ? <Text>Loading!</Text> :
-        <Text style={styles.h1}>{product.name}</Text>
+        <Text style={styles.h1}>{item.name}</Text>
         }
       </View>
     );
   }
+
 }
 
 const mapStateToProps = state => ({
-  product: state.products.product,
+  item: state.product.item,
   loading: state.products.loading,
   error: state.products.error
 });

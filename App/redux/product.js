@@ -25,8 +25,10 @@ const fetchProductFailure = error => ({
 
 /* ------------          REDUCER         ------------------ */
 const initialState = {
+  item: {},
+  loading: false,
+  error: null
 };
-
 export default function productReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_PRODUCT_BEGIN:
@@ -40,7 +42,7 @@ export default function productReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        product: action.payload
+        item: {...action.payload}
       };
 
     case FETCH_PRODUCT_FAILURE:
@@ -48,7 +50,7 @@ export default function productReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error,
-        product: {}
+        item: {}
       };
     default:
       return state;
