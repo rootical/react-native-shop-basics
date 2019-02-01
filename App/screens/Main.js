@@ -32,7 +32,7 @@ class Main extends React.Component {
               data={items}
               renderItem={({ item }) => (
                 <ListItem
-                  onPress={() => this.navigateToProduct(item.sku)}
+                  onPress={() => this.navigateToProduct(item)}
                   title={item.name}
                   subtitle={item.id}
                   key={item.id}
@@ -52,14 +52,11 @@ class Main extends React.Component {
     );
   }
 
-  navigateToProduct(sku) {
-    this.props.dispatch(fetchProduct(sku));
+  navigateToProduct(product) {
     this.props.navigation.navigate({
         routeName: 'Product',
-        params: {
-          sku: sku
-        },
-        key: sku
+        params: product,
+        key: product.sku
     });
   }
 

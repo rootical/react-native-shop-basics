@@ -1,12 +1,12 @@
 import React from 'react';
-import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { FontAwesome } from 'react-native-vector-icons';
 
 import Login from './screens/Login';
 import Main from './screens/Main';
 import Product from './screens/Product';
 
-export const SignedOut = StackNavigator({
+export const SignedOut = createStackNavigator({
   Login: {
     screen: Login,
     navigationOptions: {
@@ -15,7 +15,7 @@ export const SignedOut = StackNavigator({
   }
 });
 
-export const SignedIn = TabNavigator(
+export const SignedIn = createBottomTabNavigator(
   {
     Main: {
       screen: Main,
@@ -42,7 +42,6 @@ export const SignedIn = TabNavigator(
         fontSize: 13
       }
     },
-    tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false
@@ -50,7 +49,7 @@ export const SignedIn = TabNavigator(
 );
 
 export const createRootNavigator = (signedIn = false) => {
-  return StackNavigator(
+  return createStackNavigator(
     {
       SignedIn: {
         screen: SignedIn,

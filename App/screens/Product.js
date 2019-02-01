@@ -3,11 +3,10 @@ import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import styles from "../theme/ApplicationStyles";
 
-import { fetchProduct } from '../redux/product';
-
 class Product extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       loading: true
     }
