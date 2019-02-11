@@ -2,8 +2,7 @@ import React from 'react';
 import { Text, TextInput, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
-
-// this is to not remember password, skip it :)
+import OfflineModal from '../components/Offline';
 import {email, password} from '../configs/sensitive';
 import { login } from '../redux/auth';
 
@@ -44,6 +43,7 @@ class Login extends React.Component {
    return (
     <KeyboardAvoidingView behavior="position" style={styles.container}>
       <ScrollView>
+        <OfflineModal/>
         <Text style={styles.h1}>Friday's Shop</Text>
         <Text style={styles.error}>{this.state.error}</Text>
         <Text style={styles.textLabel}>Email</Text>

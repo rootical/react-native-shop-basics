@@ -4,13 +4,7 @@ import { connect } from "react-redux";
 import styles from "../theme/ApplicationStyles";
 
 class Product extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-    this.state = {
-      loading: true
-    }
-  }
+
   render() {
     const { error, loading, item } = this.props;
     return (
@@ -25,7 +19,6 @@ class Product extends React.Component {
       </View>
     );
   }
-
 }
 
 const mapStateToProps = state => ({

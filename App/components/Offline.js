@@ -1,31 +1,41 @@
 import React, { PureComponent } from 'react';
-import { View, Text, NetInfo, Dimensions, StyleSheet } from 'react-native';
-const { width } = Dimensions.get('window');
-function MiniOfflineSign() {
-  return (
-    <View style={styles.offlineContainer}>
-      <Text style={styles.offlineText}>No Internet Connection</Text>
-    </View>
-  );
-}
-class OfflineNotice extends PureComponent {
+import { Text, NetInfo, Button } from 'react-native';
+import styles from '../theme/ApplicationStyles';
+import Modal from 'react-native-modal';
+
+export default class OfflineModal extends PureComponent {
+  state = {
+    isVisible: false
+  };
+
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+  }
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+  }
+
+  handleConnectivityChange = isVisible => {
+    this.setState({ isVisible: !isVisible });
+  };
+
   render() {
-      return <MiniOfflineSign />;
+      return(
+        <Modal
+          style={styles.container}
+          isVisible={this.state.isVisible}
+          animationInTiming={2000}
+          animationOutTiming={2000}
+          backdropTransitionInTiming={2000}
+          backdropTransitionOutTiming={2000}
+        >
+          <Text style={styles.text}>No Internet Connection</Text>
+
+          <Button
+            buttonStyle={styles.button}
+            title="No problem"
+            onPress={() => this.setState({isVisible: false})}
+          />
+        </Modal>);
   }
 }
-const styles = StyleSheet.create({
-  offlineContainer: {
-    backgroundColor: '#b52424',
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width,
-    position: 'absolute',
-    top: 30
-  },
-  offlineText: {
-    color: '#fff'
-  }
-});
-export default OfflineNotice;

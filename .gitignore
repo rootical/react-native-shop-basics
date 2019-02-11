@@ -4,6 +4,9 @@
 App/configs/sensitive.js
 App/configs/ip.js
 
+# ide
+.idea/
+
 # expo
 .expo/
 

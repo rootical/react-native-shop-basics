@@ -1,13 +1,12 @@
 import React from 'react';
-import { Text, View, Button, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, Button, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
-
+import OfflineModal from '../components/Offline';
 import { List, ListItem } from "react-native-elements";
 
 import { fetchProducts } from '../redux/products';
-import { fetchProduct } from '../redux/product';
-
+import { fetchProductSuccess, FETCH_PRODUCT_SUCCESS } from '../redux/product';
 class Main extends React.Component {
 
   componentDidMount() {
@@ -19,6 +18,8 @@ class Main extends React.Component {
     const { error, loading, items } = this.props;
     return (
       <View style={styles.container}>
+
+        <OfflineModal/>
 
         <Text style={styles.h1}>Products</Text>
 
@@ -55,9 +56,9 @@ class Main extends React.Component {
   navigateToProduct(product) {
     this.props.navigation.navigate({
         routeName: 'Product',
-        params: product,
         key: product.sku
     });
+    this.props.dispatch(fetchProductSuccess(product));
   }
 
 }
