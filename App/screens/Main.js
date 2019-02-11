@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Button, FlatList } from 'react-native';
+import { Text, ScrollView, View, Button, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
 import OfflineModal from '../components/Offline';
@@ -14,42 +14,53 @@ class Main extends React.Component {
     this.props.dispatch(fetchProducts());
   }
 
+  _onRefresh = () => {
+    this.props.dispatch(fetchProducts());
+  };
+
   render() {
     const { error, loading, items } = this.props;
     return (
-      <View style={styles.container}>
-
-        <OfflineModal/>
-
-        <Text style={styles.h1}>Products</Text>
-
-        {error ? <Text>Error! {error.message}</Text> : null}
-
-        {
-          loading ? <Text>Loading!</Text> :
-          <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
-            <FlatList
-              keyExtractor={(item, index) => index.toString()}
-              data={items}
-              renderItem={({ item }) => (
-                <ListItem
-                  onPress={() => this.navigateToProduct(item)}
-                  title={item.name}
-                  subtitle={item.id}
-                  key={item.id}
-                  containerStyle={{ borderBottomWidth: 1 }}
-                />
-              )}
-            />
-          </List>
-        }
-
-        <Button
-          buttonStyle={styles.button}
-          title="Logout"
-          onPress={() => this.props.logout(this.props.navigation)}
+      <ScrollView refreshControl={
+        <RefreshControl
+          refreshing={loading}
+          onRefresh={this._onRefresh}
         />
-      </View>
+      }>
+        <View style={styles.container}>
+
+          <OfflineModal/>
+
+          <Text style={styles.h1}>Products</Text>
+
+          {error ? <Text>Error! {error.message}</Text> : null}
+
+          {
+            loading ? <Text>Loading!</Text> :
+            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+              <FlatList
+                keyExtractor={(item, index) => index.toString()}
+                data={items}
+                renderItem={({ item }) => (
+                  <ListItem
+                    onPress={() => this.navigateToProduct(item)}
+                    title={item.name}
+                    subtitle={item.id}
+                    key={item.id}
+                    containerStyle={{ borderBottomWidth: 1 }}
+                  />
+                )}
+              />
+            </List>
+          }
+
+          <Button
+            buttonStyle={styles.button}
+            title="Logout"
+            onPress={() => this.props.logout(this.props.navigation)}
+          />
+        </View>
+      </ScrollView>
     );
   }
 
