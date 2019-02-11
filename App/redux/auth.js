@@ -46,7 +46,7 @@ export const login = (credentials, navigation) => dispatch => {
       setUserAndRedirect(res.data, navigation, dispatch);
     })
     .catch((error) => {
-      navigation.navigate('SignedOut', {error: `Login failed. ${error}`});
+      navigation.push('SignedOut', {error: `Login failed. ${error.message}`});
     });
 };
 

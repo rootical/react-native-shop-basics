@@ -4,10 +4,15 @@ import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
 import OfflineModal from '../components/Offline';
 import { List, ListItem } from "react-native-elements";
+import { FontAwesome } from 'react-native-vector-icons';
 
 import { fetchProducts } from '../redux/products';
 import { fetchProductSuccess, FETCH_PRODUCT_SUCCESS } from '../redux/product';
 class Main extends React.Component {
+  static navigationOptions = {
+    drawerLabel: 'Home',
+    drawerIcon: ({tintColor}) => <FontAwesome name="home" size={30} color={tintColor} onClick={() => navigation.openDrawer()} />
+  };
 
   componentDidMount() {
     // TODO: best way to do that before or during the render by redux?
@@ -28,6 +33,10 @@ class Main extends React.Component {
         />
       }>
         <View style={styles.container}>
+          <Button
+            onPress={() => this.props.navigation.openDrawer()}
+            title="Show Drawer"
+          />
 
           <OfflineModal/>
 

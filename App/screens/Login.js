@@ -5,6 +5,7 @@ import styles from '../theme/ApplicationStyles';
 import OfflineModal from '../components/Offline';
 import {email, password} from '../configs/sensitive';
 import { login } from '../redux/auth';
+import * as Animatable from 'react-native-animatable';
 
 class Login extends React.Component {
   constructor(props) {
@@ -18,11 +19,11 @@ class Login extends React.Component {
 
   handleChangeEmail = (value) => {
     this.setState({email: value});
-  }
+  };
 
   handleChangePassword = (value) => {
     this.setState({password: value});
-  }
+  };
 
   handleSubmit = () => {
     const email = this.state.email;
@@ -37,7 +38,7 @@ class Login extends React.Component {
       password: '',
       error: ''
     });
-  }
+  };
 
   render() {
    return (
@@ -45,8 +46,13 @@ class Login extends React.Component {
       <ScrollView>
         <OfflineModal/>
         <Text style={styles.h1}>Friday's Shop</Text>
-        <Text style={styles.error}>{this.state.error}</Text>
+
+        { this.state.error ?
+          <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.error}>❤ {this.state.error}️</Animatable.Text>
+          : null }
+
         <Text style={styles.textLabel}>Email</Text>
+
         <TextInput
           style={styles.textInput}
           autoCapitalize="none"
@@ -57,6 +63,7 @@ class Login extends React.Component {
           value={this.state.email}
           onChangeText={(email) => this.handleChangeEmail(email)}
         />
+
         <Text style={styles.textLabel}>Password</Text>
         <TextInput
           style={styles.textInput}
