@@ -7,7 +7,9 @@ import { List, ListItem } from "react-native-elements";
 import { FontAwesome } from 'react-native-vector-icons';
 
 import { fetchProducts } from '../redux/products';
-import { fetchProductSuccess, FETCH_PRODUCT_SUCCESS } from '../redux/product';
+import { fetchProductSuccess } from '../redux/product';
+import { logout } from '../redux/auth';
+
 class Main extends React.Component {
   static navigationOptions = {
     drawerLabel: 'Home',
@@ -66,7 +68,7 @@ class Main extends React.Component {
           <Button
             buttonStyle={styles.button}
             title="Logout"
-            onPress={() => this.props.logout(this.props.navigation)}
+            onPress={() => this.props.dispatch(logout(this.props.navigation))}
           />
         </View>
       </ScrollView>

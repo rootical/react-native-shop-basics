@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
+import {Text, TextInput, KeyboardAvoidingView, ScrollView, Button} from 'react-native';
 import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
 import OfflineModal from '../components/Offline';
@@ -10,11 +10,13 @@ import * as Animatable from 'react-native-animatable';
 class Login extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       email: email || '',
       password: password || '',
-      error: '' || (this.props.navigation.state.params && this.props.navigation.state.params.error)
+      error: ''
     };
+
   }
 
   handleChangeEmail = (value) => {
@@ -26,69 +28,66 @@ class Login extends React.Component {
   };
 
   handleSubmit = () => {
-    const email = this.state.email;
-    const password = this.state.password;
-    this.props.login({
+    const {email, password} = this.state;
+    this.props.dispatch(login({
       email,
       password
-    }, this.props.navigation);
-    // clear the state after login for security
-    this.setState({
-      email: '',
-      password: '',
-      error: ''
-    });
+    }, this.props.navigation));
   };
 
   render() {
-   return (
-    <KeyboardAvoidingView behavior="position" style={styles.container}>
-      <ScrollView>
-        <OfflineModal/>
-        <Text style={styles.h1}>Friday's Shop</Text>
+    const { error, loading } = this.props;
+    return (
+      <KeyboardAvoidingView behavior="position" style={styles.container}>
+        <ScrollView>
+          <OfflineModal/>
+          <Text style={styles.h1}>Friday's Shop</Text>
 
-        { this.state.error ?
-          <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.error}>❤ {this.state.error}️</Animatable.Text>
-          : null }
+          { error ?
+            <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.error}>❤ {error.message}️</Animatable.Text>
+            : null }
 
-        <Text style={styles.textLabel}>Email</Text>
+          { loading ? <Text style={styles.h1}>Loading!</Text> : null }
 
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          maxLength={15}
-          placeholder="EMAIL"
-          placeholderTextColor="tomato"
-          value={this.state.email}
-          onChangeText={(email) => this.handleChangeEmail(email)}
-        />
+          <Text style={styles.textLabel}>Email</Text>
 
-        <Text style={styles.textLabel}>Password</Text>
-        <TextInput
-          style={styles.textInput}
-          secureTextEntry={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-          maxLength={15}
-          placeholder="PASSWORD"
-          placeholderTextColor="tomato"
-          value={this.state.password}
-          onChangeText={(password) => this.handleChangePassword(password)}
-        />
-        <Button
-          buttonStyle={styles.button}
-          title="Login"
-          onPress={this.handleSubmit}
-        />
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize="none"
+            autoCorrect={false}
+            maxLength={15}
+            placeholder="EMAIL"
+            placeholderTextColor="tomato"
+            value={this.state.email}
+            onChangeText={(email) => this.handleChangeEmail(email)}
+          />
+
+          <Text style={styles.textLabel}>Password</Text>
+          <TextInput
+            style={styles.textInput}
+            secureTextEntry={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+            maxLength={15}
+            placeholder="PASSWORD"
+            placeholderTextColor="tomato"
+            value={this.state.password}
+            onChangeText={(password) => this.handleChangePassword(password)}
+          />
+          <Button
+            buttonStyle={styles.button}
+            title="Login"
+            onPress={this.handleSubmit}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
   );
  }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  login: (credentials, navigation) => dispatch(login(credentials, navigation))
+const mapStateToProps = state => ({
+  loading: state.user.loading,
+  error: state.user.error
 });
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps)(Login);
