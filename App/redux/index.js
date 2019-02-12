@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import currentUser from './auth';
+import user from './auth';
 import products from './products';
 import product from './product';
 
 export default combineReducers({
-  currentUser,
+  user,
   products,
   product
 });

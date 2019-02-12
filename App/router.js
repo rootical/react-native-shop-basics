@@ -1,12 +1,13 @@
 import React from 'react';
-import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import { FontAwesome } from 'react-native-vector-icons';
-
 import Login from './screens/Login';
 import Main from './screens/Main';
 import Product from './screens/Product';
+import NotificationScreen from './screens/Notifications';
 
-export const SignedOut = StackNavigator({
+
+export const SignedOut = createStackNavigator({
   Login: {
     screen: Login,
     navigationOptions: {
@@ -15,42 +16,47 @@ export const SignedOut = StackNavigator({
   }
 });
 
-export const SignedIn = TabNavigator(
+export const SignedIn = createDrawerNavigator(
   {
     Main: {
       screen: Main,
       navigationOptions: {
-        title: 'Products',
-        tabBarLabel: 'Products',
-        tabBarIcon: ({ tintColor }) =>
-          <FontAwesome name="home" size={30} color={tintColor} />
+        title: 'Products'
+        //  use in case of createBottomTabNavigator
+        // tabBarLabel: 'Products',
+        // tabBarIcon: ({ tintColor }) =>
+        //   <FontAwesome name="home" size={30} color={tintColor} />
       }
     },
     Product: {
       screen: Product,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) =>
-          <FontAwesome name="home" size={30} color={tintColor} />
-      }
-    }
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: 'red',
-      inactiveTintColor: 'gray',
-      labelStyle: {
-        fontSize: 13
+        //  use in case of createBottomTabNavigator
+        // tabBarIcon: ({ tintColor }) =>
+        //   <FontAwesome name="home" size={30} color={tintColor} />
       }
     },
-    tabBarComponent: TabBarBottom,
-    tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false
+    Notifications: {
+      screen: NotificationScreen
+    },
+  },
+  {
+    // use in case of createBottomTabNavigator
+    // tabBarOptions: {
+    //   activeTintColor: 'red',
+    //   inactiveTintColor: 'gray',
+    //   labelStyle: {
+    //     fontSize: 13
+    //   }
+    // },
+    // tabBarPosition: 'bottom',
+    animationEnabled: true,
+    swipeEnabled: true
   }
 );
 
 export const createRootNavigator = (signedIn = false) => {
-  return StackNavigator(
+  return createStackNavigator(
     {
       SignedIn: {
         screen: SignedIn,

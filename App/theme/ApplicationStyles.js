@@ -12,7 +12,7 @@ export default StyleSheet.create({
   container: {
     backgroundColor: Colors.background,
     paddingHorizontal: 5,
-    paddingVertical: 20,
+    paddingVertical: 50,
     flex: 1,
     alignItems: 'stretch'
   },

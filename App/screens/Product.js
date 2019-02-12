@@ -1,23 +1,18 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, Button } from "react-native";
 import { connect } from "react-redux";
 import styles from "../theme/ApplicationStyles";
-
-import { fetchProduct } from '../redux/product';
+import OfflineModal from '../components/Offline';
 
 class Product extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true
-    }
-  }
+
   render() {
     const { error, loading, item } = this.props;
     return (
 
       <View style={styles.container}>
-
+        <Button onPress={() => this.props.navigation.goBack()} title="Go Back" />
+        <OfflineModal/>
         {error ? <Text>Error! {error.message}</Text> : null}
         {
         loading ? <Text>Loading!</Text> :
@@ -26,7 +21,6 @@ class Product extends React.Component {
       </View>
     );
   }
-
 }
 
 const mapStateToProps = state => ({

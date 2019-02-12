@@ -13,7 +13,7 @@ const fetchProductBegin = () => ({
   type: FETCH_PRODUCT_BEGIN
 });
 
-const fetchProductSuccess = product => ({
+export const fetchProductSuccess = product => ({
   type: FETCH_PRODUCT_SUCCESS,
   payload: product
 });
@@ -25,7 +25,7 @@ const fetchProductFailure = error => ({
 
 /* ------------          REDUCER         ------------------ */
 const initialState = {
-  item: {},
+  product: {},
   loading: false,
   error: null
 };
@@ -42,7 +42,7 @@ export default function productReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        item: {...action.payload}
+        item: action.payload
       };
 
     case FETCH_PRODUCT_FAILURE:
