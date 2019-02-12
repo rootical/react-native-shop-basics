@@ -1,6 +1,8 @@
 import axios from '../configs/axios';
 import IP from '../configs/ip';
 import { Vibration } from 'react-native';
+import { onSignIn, setStorage, onSignOut } from '../auth';
+
 /* -----------------    ACTION TYPES    ------------------ */
 
 const AUTH_BEGIN = 'AUTH_REMOVE_CURRENT_USER';
@@ -77,12 +79,14 @@ export default function reducer (state = initialState, action) {
 
 export const login = (credentials, navigation) => dispatch => {
   dispatch(loginBegin());
+  onSignIn();
   axios.post(`${IP}integration/customer/token`, {
     username: credentials.email,
     password: credentials.password
   })
     .then((res) => {
       setUserAndRedirect(res.data, navigation, dispatch);
+      setStorage(res.data);
     })
     .catch((error) => {
       dispatch(loginFailure(error));
@@ -96,6 +100,7 @@ export const logout = navigation => dispatch => {
   // axios.delete(`${IP}/auth/logout`)
   //   .then(() => {
       dispatch(removeCurrentUser());
+      onSignOut();
       navigation.navigate('SignedOut');
     // })
     // .catch((error) => console.error('Logout unsuccessful:  ', error));
