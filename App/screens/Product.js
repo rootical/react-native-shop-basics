@@ -11,7 +11,7 @@ class Product extends React.Component {
     return (
 
       <View style={styles.container}>
-        <Button onPress={() => this.props.navigation.goBack()}>Back</Button>
+        <Button onPress={() => this.props.navigation.goBack()} title="Go Back" />
         <OfflineModal/>
         {error ? <Text>Error! {error.message}</Text> : null}
         {
