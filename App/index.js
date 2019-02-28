@@ -3,33 +3,51 @@ import { Provider } from 'react-redux';
 import { createRootNavigator } from './router';
 import { isSignedIn } from './auth';
 import store from './store';
-import { Font } from 'expo';
+import { Font, Asset, AppLoading, SplashScreen } from 'expo';
+import { Image, View } from 'react-native';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       signedIn: false,
-      checkedSignIn: false
+      checkedSignIn: false,
+      isSplashReady: false,
+      isAppReady: false,
     };
   }
 
   async componentWillMount() {
-    await Font.loadAsync({
-      'vincHand': require('./assets/vinchand.ttf'),
-    });
-
     isSignedIn()
       .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
       .catch(error => console.error(error));
   }
 
   render() {
-    const { checkedSignIn, signedIn } = this.state;
+    const { checkedSignIn, signedIn, isSplashReady, isAppReady } = this.state;
 
-    if (!checkedSignIn) {
-      return null;
+    if (!isSplashReady) {
+      return (
+        <AppLoading
+          startAsync={this._cacheSplashResourcesAsync}
+          onFinish={() => this.setState({ isSplashReady: true })}
+          onError={console.warn}
+          autoHideSplash={false}
+        />
+      );
     }
+
+    if (!isAppReady) {
+      return (
+        <View style={{ flex: 1 }}>
+          <Image
+            source={require('./assets/splash.png')}
+            onLoad={this._cacheResourcesAsync}
+          />
+        </View>
+      );
+    }
+
 
     const Layout = createRootNavigator(signedIn);
 
@@ -38,5 +56,21 @@ export default class App extends React.Component {
         <Layout />
       </Provider>
     );
+  }
+
+
+  _cacheSplashResourcesAsync = async () => {
+    const image = require('./assets/splash.png');
+    return Asset.fromModule(image).downloadAsync();
+  }
+
+  _cacheResourcesAsync = async () => {
+    SplashScreen.hide();
+
+    await Font.loadAsync({
+      'vincHand': require('./assets/vinchand.ttf'),
+    });
+
+    this.setState({ isAppReady: true });
   }
 }
