@@ -32,8 +32,7 @@ const loginFailure = error => ({
 });
 
 export const removeCurrentUser = () => ({
-  type: AUTH_REMOVE_CURRENT_USER,
-  payload: {loading: false}
+  type: AUTH_REMOVE_CURRENT_USER
 });
 
 const initialState = {
@@ -63,6 +62,7 @@ export default function reducer (state = initialState, action) {
     case AUTH_REMOVE_CURRENT_USER:
       return {
         ...state,
+        loading: false,
         userToken: null
       };
 
