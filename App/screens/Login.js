@@ -1,11 +1,14 @@
 import React from 'react';
-import {Text, TextInput, KeyboardAvoidingView, ScrollView, Button} from 'react-native';
+import {Text, TextInput, KeyboardAvoidingView, ScrollView, Button, View} from 'react-native';
 import { connect } from 'react-redux';
 import styles from '../theme/ApplicationStyles';
 import OfflineModal from '../components/Offline';
 import {email, password} from '../configs/sensitive';
 import { login } from '../redux/auth';
 import * as Animatable from 'react-native-animatable';
+import { DangerZone } from 'expo';
+let { Lottie } = DangerZone;
+import emptyBox from '../assets/empty-box.json';
 
 class Login extends React.Component {
   constructor(props) {
@@ -14,9 +17,13 @@ class Login extends React.Component {
     this.state = {
       email: email || '',
       password: password || '',
-      error: ''
+      error: '',
+      animation: emptyBox
     };
+  }
 
+  componentDidMount() {
+    this._playAnimation();
   }
 
   handleChangeEmail = (value) => {
@@ -41,8 +48,21 @@ class Login extends React.Component {
       <KeyboardAvoidingView behavior="position" style={styles.container}>
         <ScrollView>
           <OfflineModal/>
-          <Text style={styles.h1}>Friday's Shop</Text>
 
+          {this.state.animation &&
+          <Lottie
+            ref={animation => {
+              this.animation = animation;
+            }}
+            style={{
+              width: 100,
+              height: 100
+            }}
+            source={this.state.animation}
+            loop={false}
+          />}
+
+          <Text style={styles.h1}>Friday's Shop</Text>
           { error ?
             <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.error}>❤ {error.message}️</Animatable.Text>
             : null }
@@ -81,8 +101,14 @@ class Login extends React.Component {
           />
         </ScrollView>
       </KeyboardAvoidingView>
-  );
- }
+    );
+  }
+
+  _playAnimation = () => {
+      this.animation.reset();
+      this.animation.play();
+  }
+
 }
 
 const mapStateToProps = state => ({

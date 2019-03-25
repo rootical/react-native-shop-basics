@@ -19,12 +19,12 @@ export default class App extends React.Component {
 
   async componentWillMount() {
     isSignedIn()
-      .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
+      .then(res => this.setState({ signedIn: res }))
       .catch(error => console.error(error));
   }
 
   render() {
-    const { checkedSignIn, signedIn, isSplashReady, isAppReady } = this.state;
+    const { signedIn, isSplashReady, isAppReady } = this.state;
 
     if (!isSplashReady) {
       return (
@@ -32,7 +32,7 @@ export default class App extends React.Component {
           startAsync={this._cacheSplashResourcesAsync}
           onFinish={() => this.setState({ isSplashReady: true })}
           onError={console.warn}
-          autoHideSplash={false}
+          autoHideSplash={true}
         />
       );
     }
@@ -48,21 +48,22 @@ export default class App extends React.Component {
       );
     }
 
-
     const Layout = createRootNavigator(signedIn);
 
     return (
       <Provider store={store}>
+
         <Layout />
       </Provider>
     );
+
   }
 
 
   _cacheSplashResourcesAsync = async () => {
     const image = require('./assets/splash.png');
     return Asset.fromModule(image).downloadAsync();
-  }
+  };
 
   _cacheResourcesAsync = async () => {
     SplashScreen.hide();
@@ -72,5 +73,5 @@ export default class App extends React.Component {
     });
 
     this.setState({ isAppReady: true });
-  }
+  };
 }

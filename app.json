@@ -4,6 +4,7 @@
   },
   "splash": {
     "image": "./App/assets/splash.png",
-    "resizeMode": "cover"
+    "resizeMode": "cover",
+    "backgroundColor": "#00000"
   }
 }

@@ -31,7 +31,10 @@ const loginFailure = error => ({
   payload: { error: error }
 });
 
-export const removeCurrentUser = () => ({ type: AUTH_REMOVE_CURRENT_USER });
+export const removeCurrentUser = () => ({
+  type: AUTH_REMOVE_CURRENT_USER,
+  payload: {loading: false}
+});
 
 const initialState = {
   userToken: null,
