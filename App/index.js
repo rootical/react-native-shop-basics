@@ -11,7 +11,6 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       signedIn: false,
-      checkedSignIn: false,
       isSplashReady: false,
       isAppReady: false,
     };
